@@ -1,0 +1,22 @@
+[user]
+    name = Aoxi Li
+    email = eray.aoxili@gmail.com
+[pull]
+    rebase = true
+[alias]
+    co = checkout
+    pom = push origin master
+    br = branch
+    ci = commit
+    amend = commit --amend
+    st = status
+    ll = log --graph --branches --decorate --oneline
+    lll = log --graph --branches --decorate
+    last = log -1 HEAD
+    unstage = reset HEAD --
+[push]
+    default = simple
+[color]
+    ui = true
+[help]
+    autocorrect = 1
