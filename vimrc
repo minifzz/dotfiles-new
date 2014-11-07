@@ -78,15 +78,7 @@ set novisualbell              " No blinking
 set noerrorbells              " No noise.
 set vb t_vb=                  " disable any beeps or flashes on error
 
-set laststatus=2              " always show status line.
-set shortmess=atI             " shortens messages
-set showcmd                   " display an incomplete command in statusline
-
-set statusline=%<%f\          " custom statusline
-set stl+=[%{&ff}]             " show fileformat
-set stl+=%y%m%r%=
-set stl+=%-14.(%l,%c%V%)\ %P
-
+set shortmess+=atI             " shortens messages
 
 set foldenable                " Turn on folding
 set foldmethod=marker         " Fold on the marker
@@ -113,6 +105,17 @@ map <silent> <F12> :set invlist<CR>
 let g:ycm_key_list_select_completion=[]
 let g:ycm_key_list_previous_completion=[]
 
+" powerline symbols
+let g:airline_symbols = {}
+
+let g:airline_left_sep = ''
+let g:airline_left_alt_sep = ''
+let g:airline_right_sep = ''
+let g:airline_right_alt_sep = ''
+let g:airline_symbols.branch = ''
+let g:airline_symbols.readonly = ''
+let g:airline_symbols.linenr = ''
+
 " old stuff from pnaimoli
 
 let $VIMRC = '~/.vimrc'   " for portability
@@ -129,6 +132,7 @@ set matchtime=0           " prevent matching delay
 set ic                    " force case-sensitive
 set nu                    " show line numbers
 set scrolloff=2           " keep 2 lives visible above/below the cursor
+set laststatus=2          " always show status line.
 set shortmess+=IA         " suppress intro and swap file messages
 set showcmd               " show command on last line
 set showmode              " show mode
