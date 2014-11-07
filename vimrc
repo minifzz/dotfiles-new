@@ -21,6 +21,7 @@ Plugin 'rhysd/vim-clang-format'
 
 Plugin 'rizzatti/dash.vim'
 Plugin 'bling/vim-airline'
+Plugin 'edkolev/tmuxline.vim'
 
 Plugin 'flazz/vim-colorschemes'
 Plugin 'altercation/vim-colors-solarized'
@@ -163,8 +164,9 @@ if has('autocmd')
     " Set up CPP specific autocommands
     au FileType c,cpp,cc setlocal comments=sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/,f://
 
-    au BufRead,BufNewFile *.{c,cpp,cc,cxx,h}        set ft=cpp
+    au BufNewFile,BufRead *.{c,cpp,cc,cxx,h}        set ft=cpp
     au BufNewFile,BufRead *.{sig,cnf,conf,config}   set ft=config
+    au BufNewFile,BufRead *.slaqur                  set filetype=yaml
 
     " When entering a buffer, cd to the file's directory
     autocmd BufEnter * :cd %:p:h
