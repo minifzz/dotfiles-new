@@ -20,15 +20,29 @@ Plugin 'msanders/snipmate.vim'
 Plugin 'rhysd/vim-clang-format'
 
 Plugin 'rizzatti/dash.vim'
-Plugin 'bling/vim-airline'
+Plugin 'bling/vim-airline' "{{{
+      let g:airline#extensions#tabline#enabled = 1
+      let g:airline#extensions#tabline#left_sep=' '
+      let g:airline#extensions#tabline#left_alt_sep='¦'
+      if !exists('g:airline_symbols')
+          let g:airline_symbols = {}
+      endif
+      let g:airline_left_sep = ''
+      let g:airline_left_alt_sep = ''
+      let g:airline_right_sep = ''
+      let g:airline_right_alt_sep = ''
+      let g:airline_symbols.branch = ''
+      let g:airline_symbols.readonly = ''
+      let g:airline_symbols.linenr = ''
+    "}}}
 Plugin 'edkolev/tmuxline.vim'
 
 Plugin 'flazz/vim-colorschemes'
 Plugin 'altercation/vim-colors-solarized'
-
 Plugin 'airblade/vim-gitgutter' " git diff
+Plugin 'vim-scripts/a.vim'
+call vundle#end()
 " All of your Plugins must be added before the following line
-call vundle#end()            " required
 filetype plugin indent on    " required
 " To ignore plugin indent changes, instead use:
 "filetype plugin on
@@ -41,7 +55,6 @@ filetype plugin indent on    " required
 "
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
-
 
 " END OF Vundle
 syntax enable
@@ -105,17 +118,6 @@ map <silent> <F12> :set invlist<CR>
 
 let g:ycm_key_list_select_completion=[]
 let g:ycm_key_list_previous_completion=[]
-
-" powerline symbols
-let g:airline_symbols = {}
-
-let g:airline_left_sep = ''
-let g:airline_left_alt_sep = ''
-let g:airline_right_sep = ''
-let g:airline_right_alt_sep = ''
-let g:airline_symbols.branch = ''
-let g:airline_symbols.readonly = ''
-let g:airline_symbols.linenr = ''
 
 " old stuff from pnaimoli
 
@@ -208,40 +210,18 @@ map <F2> :A<CR>
 "inoremap <C-V> <esc>:set paste<cr>mui<C-R>+<esc>mv'uV'v=:set nopaste<cr>
 vnoremap <S-C> "+y
 
-" Set up directories to search when cd'ing
-set cdpath=.,$HOME,$HOME/atl,$HOME/atl/src,/,/home
-
-"Set up path to search for .h files
-set path=.,$HOME/projects/atl/src,$HOME/projects/atl/fbsd7/include,$HOME/projects/atrade/src
-
 " Load filetype plugins
 filetype plugin on
 
-" Also, set our tags path to be useful
-" find projects/atl/src projects/btrade/src -name "*.cc" -print -or -name "*.h" -print | etags -
-set tags=$HOME/.TAGS
-
 " easy key to pop back from looking at a tag
 " noremap <silent> <C-[> :pop<CR>
-
-" set up align =
-nmap ,= :Align =<CR>
-vmap ,= :Align =<CR>
-
 set encoding=utf-8
-set guifont=Monaco\ for\ Powerline:h15
 
 """"""""""""""""""""""""""""""""""
 " ===== Edit & Reload .vimrc =====
 """"""""""""""""""""""""""""""""""
 nmap ,s :source $VIMRC
 nmap ,e :e $VIMRC
-
-""""""""""""""""""""""""""""""""""
-" ===== Windows Style Saving =====
-""""""""""""""""""""""""""""""""""
-map <silent> <C-S> :if expand("%") == ""<CR>:browse confirm w<CR>:else<CR>:confirm w<CR>:endif<CR>
-imap <c-s> <c-o><c-s>
 
 """"""""""""""""""""""""""""
 " ===== Switching tabs =====
@@ -290,50 +270,6 @@ map <silent> <leader># :call <SID>CoolComment("#")<CR>
 map <silent> <leader>" :call <SID>CoolComment("\"")<CR>
 map <silent> <leader>/ :call <SID>CoolComment("//")<CR>
 map <silent> <leader>c :call <SID>ClearComment()<CR>
-
-
-"""""""""""""""""""""""""""""""""""""
-" ====== Smart home navigation ======
-"""""""""""""""""""""""""""""""""""""
-fun! s:SmartHome()
-    if col('.') != match(getline('.'), '\S')+1
-        norm g^
-    else
-        norm g0
-    endif
-endfun
-noremap <silent> <home> :call <SID>SmartHome()<CR>
-imap <home> <C-O><home>
-
-"""""""""""""""""""""""""""""""""""""""""""""
-" ===== To save current state on exit ===== "
-"""""""""""""""""""""""""""""""""""""""""""""
-"au vimrc BufWinLeave ?* mkview
-"au vimrc BufWinEnter ?* silent loadview
-
-""""""""""""""""""""""""""""""
-" ====== PLUGIN OPTIONS ======
-""""""""""""""""""""""""""""""
-
-" === SyntaxAttr === "
-noremap ,a :call SyntaxAttr()<CR>
-
-" === Rainbow Parenthesis === "
-command! Rain :call rainbow_parenthesis#Toggle()
-
-" === SuperTab
-" http://www.vim.org/scripts/script.php?script_id=1643
-" Use the tab key to do insert completion
-" let g:SuperTabDefaultCompletionTypeDiscovery = "&omnifunc:<C-X><C-O>,&completefunc:<C-X><C-U>"
-
-" === OmniCppComplete
-" http://www.vim.org/scripts/script.php?script_id=1520
-" Complete symbol names using tags database
-let OmniCpp_MayCompleteDot = 1
-let OmniCpp_MayCompleteArrow = 1
-let OmniCpp_MayCompleteScope = 1
-let OmniCpp_ShowPrototypeInAbbr = 1
-let OmniCpp_DefaultNamespaces = ["std", "_GLIBCXX_STD"]
 
 nnoremap ; :
 nnoremap Y y$
