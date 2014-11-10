@@ -15,9 +15,10 @@ vundle="$HOME/.vim/bundle/Vundle.vim"
 
 oh_my_zsh="$HOME/.oh-my-zsh"
 [[ ! -d $oh_my_zsh ]] && echo "download oh-my-zsh" && \
-  (curl -L http://install.ohmyz.sh | sh)
+  ($HOME/.dotfiles/zsh/oh-my-zsh.sh)
 
 ln -nfs ~/.dotfiles/git/gitconfig ~/.gitconfig
 ln -nfs ~/.dotfiles/tmux.conf ~/.tmux.conf
 ln -nfs ~/.dotfiles/vimrc ~/.vimrc
+ln -nfs ~/.dotfiles/zsh/oh-my-zsh.zshrc ~/.zshrc
 ln -nfs ~/.dotfiles/wakatime.cfg ~/.wakatime.cfg
