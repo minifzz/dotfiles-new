@@ -40,7 +40,11 @@ Plugin 'edkolev/tmuxline.vim'
 Plugin 'flazz/vim-colorschemes'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'airblade/vim-gitgutter' " git diff
+Plugin 'scrooloose/nerdtree'
 Plugin 'vim-scripts/a.vim'
+if has("linux") " I haven't quite get it to work for mac, let's do linux only for now
+  Plugin 'Valloric/YouCompleteMe'
+endif
 call vundle#end()
 " All of your Plugins must be added before the following line
 filetype plugin indent on    " required
