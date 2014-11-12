@@ -21,6 +21,7 @@
 [help]
     autocorrect = 1
 [core]
+    excludesfile = ~/.dotfiles/git/gitignore_global
     editor = /usr/bin/vim
 [filter "media"]
 	clean = git media clean %f

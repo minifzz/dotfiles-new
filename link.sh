@@ -1,3 +1,6 @@
+#!/bin/bash
+# still using old she-bang here because we don't assume zsh is the default shell
+
 if [[ `uname` == 'Darwin' ]]; then
     # MacOS
     font_dir="$HOME/Library/Fonts"
@@ -18,6 +21,7 @@ oh_my_zsh="$HOME/.oh-my-zsh"
   ($HOME/.dotfiles/zsh/oh-my-zsh.sh)
 
 ln -nfs ~/.dotfiles/git/gitconfig ~/.gitconfig
+ln -nfs ~/.dotfiles/git/gitignore_global ~/.gitconfig_global
 ln -nfs ~/.dotfiles/tmux.conf ~/.tmux.conf
 ln -nfs ~/.dotfiles/vimrc ~/.vimrc
 ln -nfs ~/.dotfiles/zsh/oh-my-zsh.zshrc ~/.zshrc

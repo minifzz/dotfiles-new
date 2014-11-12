@@ -1,0 +1,38 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.pyo
+
+# Distribution / packaging
+.Python
+env/
+bin/
+build/
+develop-eggs/
+dist/
+eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# C extensions
+*.so
+*.o
+
+# vim sw files
+.*.swm
+.*.swn
+.*.swo
+.*.swp
+
+# OS generated files
+.DS_Store
+.DS_Store?
+
+# sublime sftp
+sftp-config.json

@@ -257,14 +257,14 @@ map <silent> <leader>a :noh<CR>
 
 fun! s:CoolComment(chars)
     let @@=@/
-    exe "s@^@".a:chars."@"
+    exe "s@^\\(\\s*\\)@\\1".a:chars."@"
     let @/=@@
 endfun
 
 fun! s:ClearComment()
     let @@=@/
     try
-        exe "s@^//\\|^--\\|^> \\|^[#\"%!;]@@"
+        exe "s@^\\(\\s*\\)\\(//\\|--\\|> \\|[#\"%!;]\\)@\\1@"
     catch
     endtry
     let @/=@@
