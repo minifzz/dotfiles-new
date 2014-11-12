@@ -155,12 +155,18 @@ set cindent               " indent for c syntax
 set cinkeys-=0#           " I should look up what this does again
 set cinoptions+=g2        " indent scope declarations by 2
 set cinoptions+=h2        " indent statements after scope declarations by 2
-set expandtab             " expand tabs to spaces
-set shiftwidth=4          " basic indents = 4 spaces
 set smarttab              " delete shifted spaces as if they were tabs
 set tabstop=4             " tabs = 4 spaces
+set shiftwidth=4          " basic indents = 4 spaces
+set expandtab             " expand tabs to spaces
 set paste
 
+function! SetupOmnirankEnvironment()
+  let l:path = expand('%:p')
+  if l:path =~ '.*/omnirank/.*'
+    setlocal expandtab smarttab tabstop=2 shiftwidth=2
+  endif
+endfunction
 """"""""""""""""""""""""""""""""""
 " ===== Auto command section =====
 """"""""""""""""""""""""""""""""""
@@ -171,17 +177,23 @@ if has('autocmd')
     au FileType c,cpp,cc setlocal comments=sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/,f://
 
     au BufNewFile,BufRead *.{c,cpp,cc,cxx,h}        set ft=cpp
+    " special indentation
+    au FileType c,cpp,cc        call SetupOmnirankEnvironment()
     au BufNewFile,BufRead *.{sig,cnf,conf,config}   set ft=config
     au BufNewFile,BufRead *.slaqur                  set filetype=yaml
 
     " When entering a buffer, cd to the file's directory
     autocmd BufEnter * :cd %:p:h
 
+    " Auto remove trailing whitespace
+    autocmd BufWritePre *.{py,c,cpp,cc,cxx,h} :%s/\s\+$//e
+
     " Auto source the vimrc file when it is saved
     au! BufWritePost [\._]vimrc source $VIMRC
 
     augroup END
 endif
+
 
 """"""""""""""""""""""""""""""""""
 " ===== Fast Window Resizing =====
