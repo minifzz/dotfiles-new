@@ -42,7 +42,9 @@ Plugin 'altercation/vim-colors-solarized'
 Plugin 'airblade/vim-gitgutter' " git diff
 Plugin 'scrooloose/nerdtree'
 Plugin 'vim-scripts/a.vim'
-if has("linux") " I haven't quite get it to work for mac, let's do linux only for now
+
+" I haven't quite get it to work for mac, let's do linux only for now
+if system("uname") =~ "Linux"
   Plugin 'Valloric/YouCompleteMe'
 endif
 call vundle#end()
@@ -130,7 +132,7 @@ let $VIMRC = '~/.vimrc'   " for portability
 filetype on               " enable filetype detection
 
 set hid                   " don't auto-remove hidden buffers
-set history=1000          " 50 commands stored in history
+set history=1000          " 1000 commands stored in history
 set hlsearch              " highlight all search pattern matches
 set incsearch             " incremental search
 set isk+=%,#              " none of these should be word dividers
@@ -167,6 +169,15 @@ function! SetupOmnirankEnvironment()
     setlocal expandtab smarttab tabstop=2 shiftwidth=2
   endif
 endfunction
+
+function! CPPHeader()
+  " run
+  " g++ -E -x c++ - -v < /dev/null
+  " to find out the default compiler header file path
+  if system("uname") =~ "Linux"
+    set path+=/usr/include/c++/4.8,/usr/include/x86_64-linux-gnu/c++/4.8,/usr/include/c++/4.8/backward,/usr/lib/gcc/x86_64-linux-gnu/4.8/include,/usr/local/include,/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed,/usr/include/x86_64-linux-gnu,/usr/include
+  endif
+endfunction
 """"""""""""""""""""""""""""""""""
 " ===== Auto command section =====
 """"""""""""""""""""""""""""""""""
@@ -179,6 +190,7 @@ if has('autocmd')
     au BufNewFile,BufRead *.{c,cpp,cc,cxx,h}        set ft=cpp
     " special indentation
     au FileType c,cpp,cc        call SetupOmnirankEnvironment()
+    au FileType c,cpp,cc        call CPPHeader()
     au BufNewFile,BufRead *.{sig,cnf,conf,config}   set ft=config
     au BufNewFile,BufRead *.slaqur                  set filetype=yaml
 
