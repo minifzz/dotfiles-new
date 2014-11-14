@@ -12,7 +12,6 @@ endif
 POWER := $(FONTDIR)/PowerlineSymbols.otf
 
 $(POWER):
-	echo $(POWER)
 	$(DOTFILES)/powerline-fonts/install.sh
 
 powerline: $(POWER)
@@ -24,7 +23,7 @@ git:
 tmux:
 	ln -nfs $(DOTFILES)/tmux.conf ~/.tmux.conf
 
-VUNDLE=$(HOME)/.vim/bundle/Vundle.vim
+VUNDLE := $(HOME)/.vim/bundle/Vundle.vim
 
 $(VUNDLE):
 	git clone https://github.com/gmarik/Vundle.vim.git $@
@@ -39,7 +38,7 @@ vimrc: vundle
 
 vim: wakatime vimrc
 
-OMZ=$(HOME)/.oh-my-zsh
+OMZ := $(HOME)/.oh-my-zsh
 
 $(OMZ):
 	sh $(DOTFILES)/zsh/oh-my-zsh.sh
