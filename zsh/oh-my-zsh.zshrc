@@ -94,3 +94,15 @@ source $ZSH/oh-my-zsh.sh
 
 # Commands prefixed with a space don't go into history
 setopt HIST_IGNORE_SPACE
+
+# load keychain if keychain exists
+if [[ -a /usr/bin/keychain ]]; then
+  /usr/bin/keychain $HOME/.ssh/id_rsa
+  source $HOME/.keychain/$HOST-sh
+fi
+
+# run virtual environment of omnirank if i'm at home server
+if [[ $HOST == aoxili-home ]]; then
+  export PATH="/home/omnirank/anaconda/bin:$PATH"
+  source activate omnirank
+fi
