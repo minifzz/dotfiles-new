@@ -47,7 +47,6 @@ ZSH_THEME="blinks"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git vi-mode osx vundle pip brew)
 
-
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -79,6 +78,7 @@ plugins=(git vi-mode osx vundle pip brew)
 
 platform=$(uname)
 
+# platform dependent settings
 if [[ $platform == *Darwin* ]]
 then
   # This makes our PATH visible to GUI apps
@@ -92,6 +92,41 @@ fi
 
 source $ZSH/oh-my-zsh.sh
 
+# global settiings
+bindkey "^[[A" history-search-backward
+bindkey "^[[B" history-search-forward
+
+# gg used to be alias as git gui citool shortcut
+unalias gg
+function gg()
+{
+  KEYWORDS=$@
+  COMMAND=""
+  FIRST=0
+  for i in $@
+  do
+    if [ $FIRST -eq 0 ]
+    then
+      COMMAND="grep -i \"$i\""
+      FIRST=1
+    else
+      COMMAND="$COMMAND | grep -i \"$i\""
+    fi
+  done
+  eval "$COMMAND"
+}
+
+function hgt()
+{
+  fc -l 1 | gg $@ | tail -40
+}
+
+LOCAL_RC=~/.zshrc.local
+if [[ -e $LOCAL_RC ]]
+then
+  source $LOCAL_RC
+fi
+
 # Commands prefixed with a space don't go into history
 setopt HIST_IGNORE_SPACE
 
@@ -99,10 +134,4 @@ setopt HIST_IGNORE_SPACE
 if [[ -a /usr/bin/keychain ]]; then
   /usr/bin/keychain $HOME/.ssh/id_rsa
   source $HOME/.keychain/$HOST-sh
-fi
-
-# run virtual environment of omnirank if i'm at home server
-if [[ $HOST == aoxili-home ]]; then
-  export PATH="/home/omnirank/anaconda/bin:$PATH"
-  source activate omnirank
 fi
