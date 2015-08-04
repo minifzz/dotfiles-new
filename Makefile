@@ -1,4 +1,4 @@
-all: powerline git tmux vim zsh
+all: powerline git tmux vim zsh fzf
 
 DOTFILES := $(shell pwd)
 
@@ -48,3 +48,6 @@ oh-my-zsh: $(OMZ)
 zsh: oh-my-zsh
 	ln -nfs $(DOTFILES)/zsh/oh-my-zsh.zshrc ~/.zshrc
 
+fzf:
+	git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+	~/.fzf/install

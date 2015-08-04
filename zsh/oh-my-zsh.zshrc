@@ -116,11 +116,6 @@ function gg()
   eval "$COMMAND"
 }
 
-function hgt()
-{
-  fc -l 1 | gg $@ | tail -40
-}
-
 LOCAL_RC=~/.zshrc.local
 if [[ -e $LOCAL_RC ]]
 then
@@ -135,3 +130,4 @@ if [[ -a /usr/bin/keychain ]]; then
   /usr/bin/keychain $HOME/.ssh/id_rsa
   source $HOME/.keychain/$HOST-sh
 fi
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
