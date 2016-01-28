@@ -194,8 +194,9 @@ if has('autocmd')
     au BufNewFile,BufRead *.{sig,cnf,conf,config}   set ft=config
     au BufNewFile,BufRead *.slaqur                  set filetype=yaml
 
-    " When entering a buffer, cd to the file's directory
-    autocmd BufEnter * :cd %:p:h
+    " When entering a buffer, cd to the file's directory, silently fail
+	autocmd BufEnter * silent! lcd %:p:h
+
 
     " Auto remove trailing whitespace
     autocmd BufWritePre *.{py,c,cpp,cc,cxx,h} :%s/\s\+$//e
