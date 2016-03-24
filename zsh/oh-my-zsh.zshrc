@@ -117,10 +117,7 @@ function gg()
 }
 
 LOCAL_RC=~/.zshrc.local
-if [[ -e $LOCAL_RC ]]
-then
-  source $LOCAL_RC
-fi
+[ -f $LOCAL_RC ] && source $LOCAL_RC
 
 # Commands prefixed with a space don't go into history
 setopt HIST_IGNORE_SPACE
@@ -131,3 +128,4 @@ if [[ -a /usr/bin/keychain ]]; then
   source $HOME/.keychain/$HOST-sh
 fi
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+[ -f ~/.dotfiles/zsh/zbell.zsh ] && source ~/.dotfiles/zsh/zbell.zsh
