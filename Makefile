@@ -1,4 +1,4 @@
-all: powerline git tmux vim zsh fzf
+all: powerline vim
 
 DOTFILES := $(shell pwd)
 
@@ -8,6 +8,9 @@ else
 	FONTDIR := $(HOME)/.fonts
 endif
 
+brew: 
+	$(DOTFILES)/brew.sh
+
 # one of the powerline files
 POWER := $(FONTDIR)/PowerlineSymbols.otf
 
@@ -16,13 +19,6 @@ $(POWER):
 
 powerline: $(POWER)
 
-git:
-	ln -nfs $(DOTFILES)/git/gitconfig ~/.gitconfig
-	ln -nfs $(DOTFILES)/git/gitignore_global ~/.gitconfig_global
-
-tmux:
-	ln -nfs $(DOTFILES)/tmux.conf ~/.tmux.conf
-
 VUNDLE := $(HOME)/.vim/bundle/Vundle.vim
 
 $(VUNDLE):
@@ -30,24 +26,19 @@ $(VUNDLE):
 
 vundle: $(VUNDLE)
 
-wakatime:
-	ln -nfs $(DOTFILES)/wakatime.cfg ~/.wakatime.cfg
+ifeq (,$(wildcard ~/.vimrc))
+	VIMRC := mv ~/.vimrc ~/.vimrc.copy && touch ~/.vimrc && echo "source $(DOTFILES)/vimrc" >> ~/.vimrc
+else:
+	VIMRC := touch ~/.vimrc && echo "source $(DOTFILES)/vimrc" >> ~/.vimrc
+endif
 
-vimrc: vundle
-	ln -nfs $(DOTFILES)/vimrc ~/.vimrc
+vimrc: $(VIMRC)
 
-vim: wakatime vimrc
+vim: vundle vimrc
 
-OMZ := $(HOME)/.oh-my-zsh
+$(OHMYZSH): /bin/sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
-$(OMZ):
-	sh $(DOTFILES)/zsh/oh-my-zsh.sh
+ohmyzsh: $(OHMYZSH)
 
-oh-my-zsh: $(OMZ)
-
-zsh: oh-my-zsh
-	ln -nfs $(DOTFILES)/zsh/oh-my-zsh.zshrc ~/.zshrc
-
-fzf:
-	git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-	~/.fzf/install
+zsh: ohmyzsh
+	cat $(DOTFILES)/my.zshrc >> ~/.zshrc
