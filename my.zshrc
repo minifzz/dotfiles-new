@@ -5,3 +5,4 @@ plugins=(
 )
 
 source $ZSH/oh-my-zsh.sh
+source $HOME/.bash_profile

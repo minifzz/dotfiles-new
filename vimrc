@@ -22,7 +22,6 @@ Plugin 'jistr/vim-nerdtree-tabs'
 "Plugin 'xolox/vim-easytags'
 "Plugin 'majutsushi/tagbar'
 Plugin 'ctrlpvim/ctrlp.vim'
-Plugin 'vim-scripts/a.vim'
 Plugin 'mhinz/vim-startify' 
 Plugin 'Valloric/YouCompleteMe'
 
@@ -31,8 +30,9 @@ Plugin 'airblade/vim-gitgutter'
 Plugin 'tpope/vim-fugitive'
 Plugin 'zivyangll/git-blame.vim'
 
-"Plugin 'wakatime/vim-wakatime'  " productivity tracker
-" Snippets
+" ----- Make grep works -------
+Plugin 'rking/ag.vim'
+
 Plugin 'MarcWeber/vim-addon-mw-utils'
 Plugin 'tomtom/tlib_vim' 
 Plugin 'garbas/vim-snipmate'
@@ -113,8 +113,10 @@ let g:syntastic_warning_symbol = "▲" "keeping them for ycm
 " ----- airblade/vim-gitgutter settings -----
 " In vim-airline, only display "hunks" if the diff is non-zero
 let g:airline#extensions#hunks#non_zero_only = 1
-nnoremap <Leader>gb :Gblame<CR>  " git blame
 "nmap <Leader>s :GitGutterToggle<CR> 
+nmap <Leader>gb :Gblame<CR>
+nmap :gs :Gstatus<CR>
+nmap :gd :Gdiff<CR>
 
 let g:gitgutter_sign_added = '+'
 let g:gitgutter_sign_modified = '>'
@@ -124,7 +126,14 @@ let g:gitgutter_sign_modified_removed = '<'
 let g:gitgutter_override_sign_column_highlight = 1
 highlight SignColumn guibg=bg ctermbg=bg
 set updatetime=100
-nnoremap <Leader>s :<C-u>call gitblame#echo()<CR>
+
+" ----- make git grep work
+"set grepprg=git\ grep\ -n\ --untracked
+"nmap <silent> <C-k> :grep! "\b<C-R><C-W>\b"<CR>:cw<CR><CR>
+let g:g_ag_prg="git\ grep\ -n\ --untracked" " use git grep instead of ag
+let g:ag_highlight =1                       " highlight search terms
+let g:ag_mapping_message = 1                " display help messages
+nmap <silent> <C-k> :Ag "\b<C-R><C-W>\b"<CR>
 
 " ----- ctrl-p settings ---
 let g:ctrlp_custom_ignore = {
@@ -145,7 +154,6 @@ let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
 let g:ycm_confirm_extra_conf = 0
 " get identifiers from tag files
 let g:ycm_collect_identifiers_from_tags_files = 1
-nmap <leader>D <plug>(YCMHover)
 let g:ycm_error_symbol = '✘'
 let g:ycm_warning_symbol = "▲"
 " disable the auto hover
@@ -198,6 +206,7 @@ set foldlevel=99
 "Set hybrid line numbering and autotoggle
 set number relativenumber
 
+
 augroup numbertoggle
   autocmd!
   autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
@@ -209,7 +218,7 @@ augroup END
 
 "Mappings
 
-let mapleader = ","
+let mapleader = "\<Space>"
 
 " Press Space to turn off highlighting and clear any message already displayed.
 nnoremap <silent> <Space> :nohlsearch<Bar>:echo<CR>
@@ -246,8 +255,8 @@ map di$ T$dt$
 
 "Tab commands
 nnoremap th  :tabfirst<CR>
-nnoremap tk  :tabnext<CR>
-nnoremap tj  :tabprev<CR>
+nnoremap tj  :tabnext<CR>
+nnoremap tk  :tabprev<CR>
 nnoremap tl  :tablast<CR>
 nnoremap tt  :tabedit<Space>
 "nnoremap tn  :tabnext<Space>
@@ -258,6 +267,14 @@ nnoremap td  :tabclose<CR>
 "nnoremap tl :tabprev<CR>
 nnoremap tn :tabnew<CR>
 nnoremap :te :tabe<Space>
+
+"Buffer commands
+nnoremap bh :bfirst<CR>
+nnoremap bj :bprev<CR>
+nnoremap bk :bnext<CR>
+nnoremap <S-b>h :bfirst<R>
+nnoremap <S-b>j :bnext<CR>
+nnoremap <S-b>k :bprev<R>
 
 " Navigating location list (errors)
 nnoremap lj :lnext<CR>
