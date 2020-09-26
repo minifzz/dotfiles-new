@@ -55,7 +55,10 @@ call vundle#end()
 filetype plugin indent on    " required
 syntax on "syntax highlighting
 
-" ----- Plugin-Specific Settings --------------------------------------
+"""""""""""""""""""""""""""""""""""""""""
+""""""" Plugin-Specific Settings """"""""
+"""""""""""""""""""""""""""""""""""""""""
+
 " ----- altercation/vim-colors-solarized settings -----
 " Set the colorscheme
 colorscheme solarized
@@ -88,7 +91,7 @@ let g:airline_theme='solarized'
 
 " ----- jistr/vim-nerdtree-tabs -----
 " Open/close NERDTree Tabs with Shift+t
-nmap <silent> <S-t> :NERDTreeTabsToggle<CR>
+nnoremap <silent> <S-t> :NERDTreeTabsToggle<CR>
 " To have NERDTree always open on startup
 let g:nerdtree_tabs_open_on_console_startup = 0
 " END OF plugin setups
@@ -96,27 +99,12 @@ let g:nerdtree_tabs_open_on_console_startup = 0
 " ----- startify do not change diretory
 let g:startify_change_to_dir = 0
 
-" ----- scrooloose/syntastic settings -----
-let g:syntastic_python_checkers = ['python']
-let g:syntastic_coffee_checkers = ['coffeelint', 'coffee']
-let g:syntastic_go_checkers = []
-let g:syntastic_html_tidy_ignore_errors=[" proprietary attribute \"ng-", "trimming empty"]
-let g:syntastic_mode_map = { "mode": "passive", "active_filetypes": ["python"], "passive_filetypes":["go"] }
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_javascript_checkers = ['jshint']
-let g:syntastic_always_populate_loc_list=1
-let g:syntastic_auto_loc_list = 0
-
-let g:syntastic_error_symbol = '✘' "keeping them for ycm
-let g:syntastic_warning_symbol = "▲" "keeping them for ycm
-
 " ----- airblade/vim-gitgutter settings -----
 " In vim-airline, only display "hunks" if the diff is non-zero
 let g:airline#extensions#hunks#non_zero_only = 1
-"nmap <Leader>s :GitGutterToggle<CR> 
-nmap <Leader>gb :Gblame<CR>
-nmap :gs :Gstatus<CR>
-nmap :gd :Gdiff<CR>
+nnoremap <Leader>gb :Gblame<CR>
+nnoremap :gs :Gstatus<CR>
+nnoremap :gd :Gdiff<CR>
 
 let g:gitgutter_sign_added = '+'
 let g:gitgutter_sign_modified = '>'
@@ -129,11 +117,11 @@ set updatetime=100
 
 " ----- make git grep work
 "set grepprg=git\ grep\ -n\ --untracked
-"nmap <silent> <C-k> :grep! "\b<C-R><C-W>\b"<CR>:cw<CR><CR>
+"nnoremap <silent> <C-k> :grep! "\b<C-R><C-W>\b"<CR>:cw<CR><CR>
 let g:g_ag_prg="git\ grep\ -n\ --untracked" " use git grep instead of ag
 let g:ag_highlight =1                       " highlight search terms
-let g:ag_mapping_message = 1                " display help messages
-nmap <silent> <C-k> :Ag "\b<C-R><C-W>\b"<CR>
+let g:ag_noremapping_message = 1                " display help messages
+nnoremap <silent> <C-k> :Ag "\b<C-R><C-W>\b"<CR>
 
 " ----- ctrl-p settings ---
 let g:ctrlp_custom_ignore = {
@@ -158,8 +146,8 @@ let g:ycm_error_symbol = '✘'
 let g:ycm_warning_symbol = "▲"
 " disable the auto hover
 let g:ycm_auto_hover=''
-" add mapping to manually trigger or hide the popup
-nmap <S-k> <plug>(YCMHover)
+" add noremapping to manually trigger or hide the popup
+nnoremap <S-k> <plug>(YCMHover)
 " let g:ycm_always_populate_location_list = 1
 
 " use ycm's goto def, instead of vim's default
@@ -178,7 +166,10 @@ let g:UltiSnipsExpandTrigger = "<tab>"
 let g:UltiSnipsJumpForwardTrigger = "<tab>"
 let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 
-" ---- General settings ---
+
+"""""""""""""""""""""""""""""""""""""
+"""""" General settings """""""""""""
+"""""""""""""""""""""""""""""""""""""
 set showcmd "show partial commands
 set hls "highlight searches
 set ignorecase "case insensitive search
@@ -206,52 +197,62 @@ set foldlevel=99
 "Set hybrid line numbering and autotoggle
 set number relativenumber
 
-
 augroup numbertoggle
   autocmd!
   autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
   autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
 augroup END
 
-" highlight CursorLine cterm=NONE ctermbg=NONE ctermfg=NONE guibg=NONE guifg=NONE
-" set cursorline
-
-"Mappings
-
+"""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""" Mappings """"""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""
 let mapleader = "\<Space>"
 
 " Press Space to turn off highlighting and clear any message already displayed.
 nnoremap <silent> <Space> :nohlsearch<Bar>:echo<CR>
 
-""Use Ctrl-a and Ctrl-e to jump to start/end of lines, like Emacs
-imap <C-a> <Esc>^i
-imap <C-e> <Esc>$a
+"Use Ctrl-a and Ctrl-e to jump to start/end of lines, like Emacs
+inoremap <C-a> <Esc>^i
+inoremap <C-e> <Esc>$a
 
-"Use Ctrl-a to select all
-map <C-a> ggVG
+"Select current word
+nnoremap <Leader>w viw
 
-"Up and down arrows use screen lines
-map <Up> gk
-map <Down> gj
-imap <Up> <Esc>gka
-imap <Down> <Esc>gja
-
-imap jk <Esc>
-
-"Y copies until end of line
-map Y y$
-
-"Split window
-map - :sp<CR>
-map _ :vsp<CR>
-
-"Switch between windows
-map <Tab> <C-w>w
-map <S-Tab> <C-w>W
+"Use ctrl-a to select all
+noremap <C-a> ggVG
 
 "Select within $ for Latex
-map ci$ T$ct$
-map di$ T$dt$
+noremap ci$ T$ct$
+noremap di$ T$dt$
+
+"Up and down arrows use screen lines
+noremap <Up> gk
+noremap <Down> gj
+inoremap <Up> <Esc>gka
+inoremap <Down> <Esc>gja
+
+"Use jk to return to normal mode
+inoremap jk <Esc>
+
+"Y copies until end of line
+noremap Y y$
+
+"Move current line down
+nnoremap - ddp
+"Move current line up
+nnoremap _ ddkP
+"Remove currrent line
+inoremap <C-d> <esc>ddi
+"Insert mode
+inoremap <C-u> <esc>viwU
+
+"Split window
+nnoremap <Leader>- :sp<CR>
+nnoremap <Leader>_ :vsp<CR>
+
+"Switch between windows
+noremap <Tab> <C-w>w
+noremap <S-Tab> <C-w>W
 
 "Tab commands
 nnoremap th  :tabfirst<CR>
@@ -259,12 +260,8 @@ nnoremap tj  :tabnext<CR>
 nnoremap tk  :tabprev<CR>
 nnoremap tl  :tablast<CR>
 nnoremap tt  :tabedit<Space>
-"nnoremap tn  :tabnext<Space>
 nnoremap tm  :tabm<Space>
 nnoremap td  :tabclose<CR>
-" Alternatively use
-"nnoremap th :tabnext<CR>
-"nnoremap tl :tabprev<CR>
 nnoremap tn :tabnew<CR>
 nnoremap :te :tabe<Space>
 
@@ -280,22 +277,15 @@ nnoremap <S-b>k :bprev<R>
 nnoremap lj :lnext<CR>
 nnoremap lk :lprevious<CR>
 
-" Jump to next error with Ctrl-n and previous error with Ctrl-m. Close the
-" quickfix window with <leader>a
-map <C-n> :cnext<CR>
-map <C-b> :cprevious<CR>
+" Navigate quickfix window
+noremap <C-n> :cnext<CR>
+noremap <C-b> :cprevious<CR>
 nnoremap <leader>a :cclose<CR>
 
-" Visual linewise up and down by default (and use gj gk to go quicker)
-noremap <Up> gk
-noremap <Down> gj
-noremap j gj
-noremap k gk
-
 "gdb
-map :gdb :ConqueGdb
-map :gdbs :ConqueGdbSplit
-map :gdbvs :ConqueGdbVSplit
+noremap :gdb :ConqueGdb
+noremap :gdbs :ConqueGdbSplit
+noremap :gdbvs :ConqueGdbVSplit
 
 "freeze vim latex auto insert
-let g:Imap_FreezeImap=1
+let g:Inoremap_FreezeInoremap=1
