@@ -295,6 +295,7 @@ set foldlevel=99
 "Set hybrid line numbering and autotoggle
 set number relativenumber
 
+set scrolloff=10                " always show at leat five lines visable above and below cursor
 augroup numbertoggle
   autocmd!
   autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
@@ -321,6 +322,8 @@ nnoremap <silent> - :nohlsearch<Bar>:echo<CR>
 
 "Use jk to return to normal mode
 inoremap jk <Esc>
+"toggle
+nnoremap <Leader>zz :let &scrolloff=999-&scrolloff<CR>
 
 """""""""""""""""" Motion """""""""""""""""""
 "Use Ctrl-a and Ctrl-e to jump to start/end of lines, like Emacs
@@ -376,15 +379,15 @@ onoremap <silent> aw <nop>
 onoremap <silent> aW <nop>
 " Operate on the current line
 onoremap <silent> l :<c-u>normal! _vg_<cr>
-" Operate on next string, exclude the double quote
-onoremap <silent> n" :<c-u>execute "normal! /\"\r:nohlsearch\rvi\""<cr>
-" Operate on next string, include the double quote
-onoremap <silent> N" :<c-u>execute "normal! /\"\r:nohlsearch\rva\""<cr>
 " Operate on next brace
 onoremap <silent> nb :<c-u>execute "normal! /(\r:nohlsearch\rvi("<cr>
 " Operate on next brace
 onoremap <silent> Nb :<c-u>execute "normal! /(\r:nohlsearch\rva("<cr>
 " Operate on next curly brace
+" Operate on next string, exclude the double quote
+onoremap <silent> nB :<c-u>execute "normal! /\"\r:nohlsearch\rvi\""<cr>
+" Operate on next string, include the double quote
+onoremap <silent> NB :<c-u>execute "normal! /\"\r:nohlsearch\rva\""<cr>
 onoremap <silent> n{ :<c-u>execute "normal! /{\r:nohlsearch\rvi{"<cr>
 " Operate on next curly brace
 onoremap <silent> N{ :<c-u>execute "normal! /{\r:nohlsearch\rva{"<cr>
@@ -404,10 +407,8 @@ nnoremap g{ :<c-u>execute "normal! /{\r:nohlsearch\rw"<cr>
 
 " Go back to the exact spot of last modification line
 nnoremap g. `.
-"""""""""""" Windows and Tabs """"""""""""""" 
-"Split window
-nnoremap <Leader>- :vsp<CR>
 
+"""""""""""" Windows and Tabs """"""""""""""" 
 "Switch between windows
 noremap <Tab> <C-w>w
 noremap <S-Tab> <C-w>W
@@ -447,7 +448,7 @@ nnoremap :w<CR> <nop>
 nnoremap :q<CR> <nop>
 nnoremap $ <nop>
 nnoremap 0 <nop>
-
+ 
 """"""""""""""""" Other """"""""""""""""""""" 
 "gdb
 noremap :gdb :ConqueGdb
@@ -474,3 +475,10 @@ augroup abbrev
     autocmd FileType go iabbrev se select
     autocmd FileType go iabbrev td //TODO (minzhang): 
 augroup END
+
+nnoremap <Leader><Space> :match ErrorMsg /\s\+$/ <cr>
+nnoremap <Leader>c<Space> :match none <cr>
+
+func Showhighlight()
+    execute ":source $VIMRUNTIME/syntax/hitest.vim"
+endfunction
