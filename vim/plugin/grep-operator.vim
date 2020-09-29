@@ -1,17 +1,21 @@
 nnoremap <leader>g :set operatorfunc=<SID>GrepOperator<cr>g@
-vnoremap <leader>g :<c-u>call <SID>GrepOperator(visualmode())<cr>
+vnoremap <silent> <leader>g :<c-u>call <SID>GrepOperator(visualmode())<cr>
+nnoremap <silent> <leader>gt :<c-u>call <SID>ToggleFlags()<cr>
 
-function s:Grep(word)
-    normal ma
-    let buffernr = winbufnr(0)
-    "The ! here prevents the cursor from jumping to the first matched result
-    silent execute "grep " . a:word
-    "Let vim-qf help us open the window, so we do nothing here
+"git grep runAuction -- '*.go' ':(exclude)*_test.go'
+let g:grep_use_additional_flags = v:false
+let b:grep_additional_flags = ''
+
+" basically a grep but this keep the current window the same without going to
+" the first search result
+function! s:Grep(word)
+    "the ! here prevents the cursor from jumping to the first matched result
+    silent execute "grep! " . shellescape(a:word) . (g:grep_use_additional_flags ? b:grep_additional_flags : '')
     redraw! " regenerate the window
-    "Go back to the previous buffer
-    silent execute "buffer " . buffernr
-    normal g`a
-    copen
+    "execute "normal! gg/" . a:word . '\r'
+    "call RestoreBufferBeforeGrep()
+    "Jump to the quickfix list
+    "cwindow
 endfunction
 
 function! s:GrepOperator(type)
@@ -24,9 +28,13 @@ function! s:GrepOperator(type)
     else
         return
     endif
-    let grepword = shellescape(@@)
-    call <SID>Grep(grepword)
+    call <SID>Grep(@@)
     let @@ = saved_unnamed_register
+endfunction
+
+function! s:ToggleFlags()
+    let g:grep_use_additional_flags = !g:grep_use_additional_flags
+    echo "Setting additional grep flags to " . shellescape(g:grep_use_additional_flags ? b:grep_additional_flags : '')
 endfunction
 
 " ----- make git grep work

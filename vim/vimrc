@@ -36,6 +36,8 @@ Plugin 'ervandew/supertab'
 
 " ------ For quickfix -------------------------------------------------
 Plugin 'romainl/vim-qf'
+Plugin 'bfrg/vim-qf-preview'
+
 call vundle#end()
 " END OF Vundle
 
@@ -378,15 +380,15 @@ nnoremap tn :tabnew<CR>
 nnoremap <Leader>w :w<CR>
 
 " quickfix mappings
-let g:qf_mapping_ack_style = 1
+" let g:qf_mapping_ack_style = 1
 nmap <C-j> <Plug>(qf_qf_next)
 nmap <C-k> <Plug>(qf_qf_previous)
-nmap <Leader>a <Plug>(qf_qf_toggle)
+nmap <Leader>q <Plug>(qf_qf_toggle)
 nmap <C-s> <Plug>(qf_qf_switch)
 
 nmap <C-n> <Plug>(qf_loc_next)
 nmap <C-m> <Plug>(qf_loc_previous)
-nmap <Leader>b <Plug>(qf_qf_toggle)
+nmap <Leader>a <Plug>(qf_loc_toggle)
 
 """"""""""""""""" Other """""""""""""""""""""
 "gdb
@@ -418,18 +420,4 @@ function! Showhighlight()
     execute ":source $VIMRUNTIME/syntax/hitest.vim"
 endfunction
 
-"TODO set up quick window navigation
-"statusline
-hi StatusLine term=bold cterm=bold ctermfg=White ctermbg=235
-hi StatusHostname term=bold cterm=bold ctermfg=107 ctermbg=235 guifg=#799d6a
-hi StatusGitBranch term=bold cterm=bold ctermfg=215 ctermbg=235 guifg=#ffb964
-
-function! AirlineInit()
-    let winnum=tabpagewinnr(tabpagenr())
-    let g:airline_section_y = 'win:' . winnum
-    let g:airline_section_x = ""
-endfunction
-
 let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
-
-"TODO use tab for tab navigation
