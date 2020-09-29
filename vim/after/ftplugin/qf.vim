@@ -40,11 +40,11 @@ endif
 nnoremap <silent> <buffer> t <C-w><CR><C-w>T
 
 " i: open entry
-nnoremap <silent> <buffer> i :<c-u>call OpenEntryUnderCursor(0)<CR>
-nnoremap <silent> <buffer> <CR> :<c-u>call OpenEntryUnderCursor(0)<CR>
+nnoremap <silent> <buffer> i :<c-u>call quickfix#OpenEntryUnderCursor(0)<CR>
+nnoremap <silent> <buffer> <CR> :<c-u>call quickfix#OpenEntryUnderCursor(0)<CR>
 
 " o: open entry and come back
-nnoremap <silent> <buffer> o :<c-u> call OpenEntryUnderCursor(1)<CR>
+nnoremap <silent> <buffer> o :<c-u> call quickfix#OpenEntryUnderCursor(1)<CR>
 
 " O: open entry and close the location/quickfix window.
 if b:qf_isLoc == 1

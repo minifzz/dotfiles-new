@@ -1,6 +1,6 @@
 nnoremap <silent> <leader>0 :<c-u>call <SID>RestoreBuffersBeforeQf()<cr>
 
-function! OpenEntryUnderCursor(stay)
+function! quickfix#OpenEntryUnderCursor(stay)
     let linenr = line(".")
     wincmd p
     silent execute "cc" . linenr
