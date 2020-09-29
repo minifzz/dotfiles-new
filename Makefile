@@ -1,3 +1,4 @@
+# TODO: this make needs to be updated
 all: powerline vim
 
 DOTFILES := $(shell pwd)
