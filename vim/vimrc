@@ -175,51 +175,7 @@ let g:go_def_mode = "godef"
 "let g:go_def_mapping_enabled=0"
 
 " -------- go settngs
-augroup go
-  autocmd!
-
-  " Show by default 4 spaces for a tab
-  autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=4 shiftwidth=4
-
-  " :GoBuild and :GoTestCompile
-  autocmd FileType go nnoremap :build :<C-u>call <SID>build_go_files()
-
-  " :GoTest
-  autocmd FileType go nnoremap :test  <Plug>(go-test)
-
-  " :GoRun
-  autocmd FileType go nnoremap :run  <Plug>(go-run)
-
-  " :GoCoverageToggle
-  " autocmd FileType go nmap <Leader>c <Plug>(go-coverage-toggle)
-
-  " :GoMetaLinter
-  " autocmd FileType go nmap <Leader>l <Plug>(go-metalinter)
-
-  " :GoDef but opens in a vertical split
-  " autocmd FileType go nmap <Leader>v <Plug>(go-def-vertical)
-  " :GoDef but opens in a horizontal split
-  " autocmd FileType go nmap <Leader>s <Plug>(go-def-split)
-
-  " Open :GoDecls  with ctrl-g
-  autocmd Filetype go nnoremap <C-g>d :GoDecls<cr>
-
-  " GoReferers
-  autocmd Filetype go nnoremap <C-g>r :GoReferrers<cr>
-  autocmd Filetype go nnoremap <C-g>c :GoCallers<cr>
-
-  " GoSameIds
-  autocmd Filetype go nnoremap <C-g>i :GoSameIds<cr>
-  autocmd Filetype go nnoremap <C-g>ic :GoSameIdsClear<cr>
-
-  " :GoAlternate  commands :A, :AV, :AS and :AT
-  autocmd Filetype go command! -bang A call go#alternate#Switch(<bang>0, 'edit')
-  autocmd Filetype go command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
-  autocmd Filetype go command! -bang AS call go#alternate#Switch(<bang>0, 'split')
-  autocmd Filetype go command! -bang AT call go#alternate#Switch(<bang>0, 'tabe')
-
-augroup END
-
+" See after/ftplugin/go.vim
 " build_go_files is a custom function that builds or compiles the test file.
 " It calls :GoBuild if its a Go file, or :GoTestCompile if it's a test file
 function! s:build_go_files()
@@ -233,7 +189,6 @@ endfunction
 
 " let guru scope be the whole workspace
 " let g:go_guru_scope = ["pinterest.com/ads/..."]
-
 
 """""""""""""""""""""""""""""""""""""
 """""" General settings """""""""""""
@@ -276,10 +231,11 @@ set foldlevel=99
 set number relativenumber
 
 set scrolloff=10                " always show at leat five lines visable above and below cursor
-augroup numbertoggle
+augroup vimrc
   autocmd!
   autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
   autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
+  autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=4 shiftwidth=4
 augroup END
 
 " Enable to copy to clipboard for operations like yank, delete, change and put
@@ -432,13 +388,6 @@ nmap <C-n> <Plug>(qf_loc_next)
 nmap <C-m> <Plug>(qf_loc_previous)
 nmap <Leader>b <Plug>(qf_qf_toggle)
 
-augroup my_quickfix
-    autocmd!
-    autocmd FileType qf nnoremap <buffer> h <Plug>(qf_previous_file)
-    autocmd FileType qf nnoremap <buffer> l <Plug>(qf_next_file)
-    autocmd FileType qf nnoremap <buffer> q :q<cr>
-augroup END
-
 """"""""""""""""" Other """""""""""""""""""""
 "gdb
 noremap :gdb :ConqueGdb
@@ -451,9 +400,6 @@ let g:Inoremap_FreezeInoremap=1
 "quick command to open and source my vimrc file
 nnoremap <leader>ve :vsplit $MYVIMRC<cr>
 nnoremap <leader>vs :source $MYVIMRC<cr>
-augroup vim
-    autocmd FileType vim nnoremap <leader>% :source %<cr>
-augroup END
 "
 """""""""""""" Abbreviations """"""""""""""""
 "typos and shortcuts
@@ -462,14 +408,6 @@ iabbrev waht what
 iabbrev tehn then
 iabbrev vra var
 augroup my_abbs
-    autocmd!
-    autocmd FileType vim iabbrev "" "--------------------------------------------- {{{<CR>}}}<CR>
-    autocmd FileType vim iabbrev ff function!<CR>endfunction<Up>
-    autocmd FileType vim iabbrev cwd <cword>
-    autocmd FileType vim iabbrev cWD <cWORD>
-    autocmd FileType vim iabbrev aug augroup<cr>augroup END<Up>
-    autocmd FileType go iabbrev se select
-    autocmd FileType go iabbrev td //TODO (minzhang):
 augroup END
 cabb vhelp vertical help
 
