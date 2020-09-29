@@ -1,54 +1,41 @@
-set nocompatible              
+set nocompatible
 filetype off
 
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
-
 Plugin 'VundleVim/Vundle.vim'
 
 " ----- Making Vim look good ------------------------------------------
 Plugin 'altercation/vim-colors-solarized'
-Plugin 'tomasr/molokai'
-
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
+Plugin 'vim-ctrlspace/vim-ctrlspace'
+Plugin 'mkitt/tabline.vim'
 
 " ----- Vim as a programmer's text editor -----------------------------
 Plugin 'scrooloose/nerdtree'
 Plugin 'jistr/vim-nerdtree-tabs'
-"Plugin 'vim-syntastic/syntastic' "I'm going to disable syntastic for now
-"since it is slow
-"Plugin 'xolox/vim-misc'
-"Plugin 'xolox/vim-easytags'
-"Plugin 'majutsushi/tagbar'
 Plugin 'ctrlpvim/ctrlp.vim'
-Plugin 'mhinz/vim-startify' 
+Plugin 'mhinz/vim-startify'
 Plugin 'Valloric/YouCompleteMe'
+Plugin 'fatih/vim-go'
+Plugin 'rhysd/vim-clang-format'
 
 " ----- Working with Git ----------------------------------------------
 Plugin 'airblade/vim-gitgutter'
 Plugin 'tpope/vim-fugitive'
 Plugin 'zivyangll/git-blame.vim'
 
-" ----- Make grep works -------
-Plugin 'rking/ag.vim'
+" ----- Code editing --------------------------------------------------
+"This plugin helps splitting and joining multiple lines
+Plugin 'AndrewRadev/splitjoin.vim' 
 
-Plugin 'MarcWeber/vim-addon-mw-utils'
-Plugin 'tomtom/tlib_vim' 
-Plugin 'garbas/vim-snipmate'
-" Optional:
-Plugin 'honza/vim-snippets'
-
-Plugin 'rhysd/vim-clang-format'
-
-Plugin 'rizzatti/dash.vim'
-
-"Plugin 'edkolev/tmuxline.vim'
-Plugin 'fatih/vim-go'
-Plugin 'AndrewRadev/splitjoin.vim'
-Plugin 'ervandew/supertab'
+" ----- Useful snips --------------------------------------------------
 Plugin 'SirVer/ultisnips'
+Plugin 'ervandew/supertab'
 
+" ------ For quickfix -------------------------------------------------
+Plugin 'romainl/vim-qf'
 call vundle#end()
 " END OF Vundle
 
@@ -84,6 +71,7 @@ let g:airline_powerline_fonts = 1
 
 " Show PASTE if in paste mode
 let g:airline_detect_paste=1
+let g:airline_detect_modified=1
 let g:airline#extensions#tabline#formatter = 'unique_tail'
 
 " Show airline for tabs too
@@ -96,12 +84,9 @@ let g:airline#extensions#tabline#formatter = 'default'
 let g:airline_theme='solarized'
 
 " ----- jistr/vim-nerdtree-tabs -----
-" Open/close NERDTree Tabs with Shift+t
-nnoremap <silent> <S-t> :NERDTreeTabsToggle<CR>
-" To have NERDTree always open on startup
-let g:nerdtree_tabs_open_on_console_startup = 0
-" END OF plugin setups
-"
+" Open/close NERDTree Tabs
+nnoremap <silent> <leader>nt :NERDTreeTabsToggle<CR>
+
 " ----- startify do not change diretory
 let g:startify_change_to_dir = 0
 
@@ -118,16 +103,6 @@ let g:gitgutter_sign_removed = '-'
 let g:gitgutter_sign_removed_first_line = '^'
 let g:gitgutter_sign_modified_removed = '<'
 let g:gitgutter_override_sign_column_highlight = 1
-
-set updatetime=100
-
-" ----- make git grep work
-"set grepprg=git\ grep\ -n\ --untracked
-"nnoremap <silent> <C-k> :grep! "\b<C-R><C-W>\b"<CR>:cw<CR><CR>
-let g:g_ag_prg="git\ grep\ -n\ --untracked" " use git grep instead of ag
-let g:ag_highlight =1                       " highlight search terms
-let g:ag_noremapping_message = 1                " display help messages
-nnoremap <silent> <C-k> :Ag "\b<C-R><C-W>\b"<CR>
 
 " ----- ctrl-p settings ---
 let g:ctrlp_custom_ignore = {
@@ -189,6 +164,7 @@ let g:go_highlight_functions = 1
 let g:go_highlight_function_calls = 1
 let g:go_highlight_extra_types = 1
 let g:go_highlight_generate_tags = 1
+let g:go_decls_includes = "func"
 
 let g:go_auto_type_info = 0
 let g:go_fmt_experimental = 1
@@ -196,9 +172,9 @@ let g:go_fmt_fail_silently = 1
 "let g:go_doc_keywordprg_enabled = 0
 " let g:go_bin_path = expand("~/goinstallbinaries/bin")
 let g:go_def_mode = "godef"
-"let g:go_def_mapping_enabled=0" 
+"let g:go_def_mapping_enabled=0"
 
-
+" -------- go settngs
 augroup go
   autocmd!
 
@@ -206,31 +182,35 @@ augroup go
   autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=4 shiftwidth=4
 
   " :GoBuild and :GoTestCompile
-  autocmd FileType go nmap <leader>b :<C-u>call <SID>build_go_files()<CR>
+  autocmd FileType go nnoremap :build :<C-u>call <SID>build_go_files()
 
   " :GoTest
-  autocmd FileType go nmap <leader>t  <Plug>(go-test)
+  autocmd FileType go nnoremap :test  <Plug>(go-test)
 
   " :GoRun
-  autocmd FileType go nmap <leader>r  <Plug>(go-run)
+  autocmd FileType go nnoremap :run  <Plug>(go-run)
 
   " :GoCoverageToggle
-  autocmd FileType go nmap <Leader>c <Plug>(go-coverage-toggle)
+  " autocmd FileType go nmap <Leader>c <Plug>(go-coverage-toggle)
 
   " :GoMetaLinter
-  autocmd FileType go nmap <Leader>l <Plug>(go-metalinter)
+  " autocmd FileType go nmap <Leader>l <Plug>(go-metalinter)
 
   " :GoDef but opens in a vertical split
-  autocmd FileType go nmap <Leader>v <Plug>(go-def-vertical)
+  " autocmd FileType go nmap <Leader>v <Plug>(go-def-vertical)
   " :GoDef but opens in a horizontal split
-  autocmd FileType go nmap <Leader>s <Plug>(go-def-split)
-  
-  " Open :GoDecls  with ctrl-g 
-  autocmd Filetype go nmap <C-g> :GoDecls<cr>
-    
+  " autocmd FileType go nmap <Leader>s <Plug>(go-def-split)
+
+  " Open :GoDecls  with ctrl-g
+  autocmd Filetype go nnoremap <C-g>d :GoDecls<cr>
+
   " GoReferers
-  autocmd Filetype go nmap <Leader>r :GoReferrers<cr>
-  autocmd Filetype go nmap <Leader>c :GoCallers<cr>
+  autocmd Filetype go nnoremap <C-g>r :GoReferrers<cr>
+  autocmd Filetype go nnoremap <C-g>c :GoCallers<cr>
+
+  " GoSameIds
+  autocmd Filetype go nnoremap <C-g>i :GoSameIds<cr>
+  autocmd Filetype go nnoremap <C-g>ic :GoSameIdsClear<cr>
 
   " :GoAlternate  commands :A, :AV, :AS and :AT
   autocmd Filetype go command! -bang A call go#alternate#Switch(<bang>0, 'edit')
@@ -238,7 +218,6 @@ augroup go
   autocmd Filetype go command! -bang AS call go#alternate#Switch(<bang>0, 'split')
   autocmd Filetype go command! -bang AT call go#alternate#Switch(<bang>0, 'tabe')
 
-  
 augroup END
 
 " build_go_files is a custom function that builds or compiles the test file.
@@ -283,10 +262,11 @@ set noerrorbells                " No beeps
 set splitright                  " Vertical windows should be split to right
 set splitbelow                  " Horizontal windows should split to bottom
 set autowrite                   " Automatically save before :next, :make etc.
-set hidden                      " Buffer should still exist if window is closed
 set nocursorcolumn              " Do not highlight column (speeds up highlighting)
 set nocursorline                " Do not highlight cursor (speeds up highlighting)
-set lazyredraw                  " Wait to redraw
+set hidden                      " Buffer should still exist if window is closed
+set encoding=utf-8
+set updatetime=100
 
 "Code folding
 set foldmethod=indent
@@ -344,11 +324,11 @@ inoremap <Down> <Esc>gja
 
 nnoremap H _
 nnoremap L g_
-"""""""""""""""""" Editting """"""""""""""""" 
+"""""""""""""""""" Editting """""""""""""""""
 "Y copies until end of line
 noremap Y y$
 "search and replace current word
-nnoremap <Leader>f :%s/\<<C-r><C-w>\>//g<Left><Left>
+nnoremap <C-f><space> :%s/\<<C-r><C-w>\>//g<Left><Left>
 
 "Move current line down
 nnoremap <leader>_ ddp
@@ -370,15 +350,16 @@ nnoremap <leader>' viw<esc>a"<esc>bi"<esc>lel
 onoremap H _
 onoremap L g_
 onoremap <silent> u iw
-onoremap <silent> o iW
-onoremap <silent> U aw
+onoremap <silent> U iW
+onoremap <silent> o aw
 onoremap <silent> O aW
-onoremap <silent> iw <nop>
-onoremap <silent> iW <nop>
-onoremap <silent> aw <nop>
-onoremap <silent> aW <nop>
+vnoremap <silent> u iw
+vnoremap <silent> U iW
+vnoremap <silent> o aw
+vnoremap <silent> O aW
 " Operate on the current line
-onoremap <silent> l :<c-u>normal! _vg_<cr>
+nnoremap <silent> vil _vg_
+onoremap <silent> il :<c-u>normal! _vg_<cr>
 " Operate on next brace
 onoremap <silent> nb :<c-u>execute "normal! /(\r:nohlsearch\rvi("<cr>
 " Operate on next brace
@@ -404,52 +385,61 @@ nnoremap gb :<c-u>execute "normal! /(\r:nohlsearch\rl"<cr>
 nnoremap ga :<c-u>execute "normal! /(\\\\|{\\\\|,\r:nohlsearch\rw"<cr>
 nnoremap g{ :<c-u>execute "normal! /{\r:nohlsearch\rw"<cr>
 
+" Quick search functions
+nnoremap su :execute "normal! /" . expand("<cword>") . "\r"<cr>
+nnoremap s<Space> :execute "normal! /" . expand("<cWORD>") . "\r"<cr>
 
 " Go back to the exact spot of last modification line
 nnoremap g. `.
 
-"""""""""""" Windows and Tabs """"""""""""""" 
+"""""""""""" Windows and Tabs """""""""""""""
 "Switch between windows
-noremap <Tab> <C-w>w
-noremap <S-Tab> <C-w>W
+nnoremap <Tab> <C-w>w
+nnoremap <S-Tab> <C-w>W
+nnoremap <left> <C-w>h
+nnoremap <right> <C-w>l
+nnoremap <up> <C-w>k
+nnoremap <down> <C-w>j
+nnoremap <Leader>h <C-w>h
+nnoremap <Leader>l <C-w>l
+nnoremap <Leader>i <C-w>k
+nnoremap <Leader>m <C-w>j
+nnoremap <Leader>c <C-W>c
 
 "Tab commands
+nnoremap <CR> :tabnext<CR>
+nnoremap <S-CR> :tabprevious<CR>
 nnoremap th  :tabfirst<CR>
-nnoremap tj  :tabnext<CR>
-nnoremap tk  :tabprev<CR>
+nnoremap tj  :tabprev<CR>
+nnoremap tk  :tabnext<CR>
 nnoremap tl  :tablast<CR>
-nnoremap tt  :tabedit<Space>
+nnoremap te  :tabedit<Space>
+nnoremap t<CR> :tabedit %<CR>
 nnoremap tm  :tabm<Space>
-nnoremap td  :tabclose<CR>
+nnoremap tx  :tabclose<CR>
 nnoremap tn :tabnew<CR>
-nnoremap :te :tabe<Space>
-
-"Buffer commands
-nnoremap <Leader>bh :bfirst<CR>
-nnoremap <Leader>bj :bnext<CR>
-nnoremap <Leader>bk :bprev<CR>
-
-" Navigating location list (errors)
-nnoremap <Leader>lj :lnext<CR>
-nnoremap <Leader>lk :lprevious<CR>
-
-" Navigate quickfix window
-noremap <C-n> :cnext<CR>
-noremap <C-b> :cprevious<CR>
-nnoremap <leader>a :cclose<CR>
 
 nnoremap <Leader>w :w<CR>
-nnoremap <Leader>q :q<CR>
-nnoremap <Leader>Q :wqa<CR>
 
-" Disable some commands to train muscle memories
-nnoremap :wqa<CR> <nop>
-nnoremap :w<CR> <nop>
-nnoremap :q<CR> <nop>
-nnoremap $ <nop>
-nnoremap 0 <nop>
- 
-""""""""""""""""" Other """"""""""""""""""""" 
+" quickfix mappings
+let g:qf_mapping_ack_style = 1
+nmap <C-j> <Plug>(qf_qf_next)
+nmap <C-k> <Plug>(qf_qf_previous)
+nmap <Leader>a <Plug>(qf_qf_toggle)
+nmap <C-s> <Plug>(qf_qf_switch)
+
+nmap <C-n> <Plug>(qf_loc_next)
+nmap <C-m> <Plug>(qf_loc_previous)
+nmap <Leader>b <Plug>(qf_qf_toggle)
+
+augroup my_quickfix
+    autocmd!
+    autocmd FileType qf nnoremap <buffer> h <Plug>(qf_previous_file)
+    autocmd FileType qf nnoremap <buffer> l <Plug>(qf_next_file)
+    autocmd FileType qf nnoremap <buffer> q :q<cr>
+augroup END
+
+""""""""""""""""" Other """""""""""""""""""""
 "gdb
 noremap :gdb :ConqueGdb
 noremap :gdbs :ConqueGdbSplit
@@ -459,26 +449,49 @@ noremap :gdbvs :ConqueGdbVSplit
 let g:Inoremap_FreezeInoremap=1
 
 "quick command to open and source my vimrc file
-nnoremap <leader>ev :vsplit $MYVIMRC<cr>
-nnoremap <leader>sv :source $MYVIMRC<cr>
+nnoremap <leader>ve :vsplit $MYVIMRC<cr>
+nnoremap <leader>vs :source $MYVIMRC<cr>
+augroup vim
+    autocmd FileType vim nnoremap <leader>% :source %<cr>
+augroup END
 "
-"""""""""""""" Abbreviations """""""""""""""" 
+"""""""""""""" Abbreviations """"""""""""""""
 "typos and shortcuts
 iabbrev adn and
 iabbrev waht what
 iabbrev tehn then
 iabbrev vra var
-augroup abbrev
+augroup my_abbs
     autocmd!
     autocmd FileType vim iabbrev "" "--------------------------------------------- {{{<CR>}}}<CR>
-
+    autocmd FileType vim iabbrev ff function!<CR>endfunction<Up>
+    autocmd FileType vim iabbrev cwd <cword>
+    autocmd FileType vim iabbrev cWD <cWORD>
+    autocmd FileType vim iabbrev aug augroup<cr>augroup END<Up>
     autocmd FileType go iabbrev se select
-    autocmd FileType go iabbrev td //TODO (minzhang): 
+    autocmd FileType go iabbrev td //TODO (minzhang):
 augroup END
+cabb vhelp vertical help
 
-nnoremap <Leader><Space> :match ErrorMsg /\s\+$/ <cr>
-nnoremap <Leader>c<Space> :match none <cr>
+nnoremap <Leader><Space><Space> :match ErrorMsg /\s\+$/ <cr>
+nnoremap <Leader><Space>d :%s/\s\+$//g <cr>
 
-func Showhighlight()
+function! Showhighlight()
     execute ":source $VIMRUNTIME/syntax/hitest.vim"
 endfunction
+
+"TODO set up quick window navigation
+"statusline
+hi StatusLine term=bold cterm=bold ctermfg=White ctermbg=235
+hi StatusHostname term=bold cterm=bold ctermfg=107 ctermbg=235 guifg=#799d6a
+hi StatusGitBranch term=bold cterm=bold ctermfg=215 ctermbg=235 guifg=#ffb964
+
+function! AirlineInit()
+    let winnum=tabpagewinnr(tabpagenr())
+    let g:airline_section_y = 'win:' . winnum
+    let g:airline_section_x = ""
+endfunction
+
+let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
+
+"TODO use tab for tab navigation
