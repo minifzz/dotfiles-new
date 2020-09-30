@@ -38,6 +38,9 @@ Plugin 'ervandew/supertab'
 Plugin 'romainl/vim-qf'
 Plugin 'bfrg/vim-qf-preview'
 
+" ------ For quick search ---------------------------------------------
+Plugin 'rking/ag.vim'
+
 call vundle#end()
 " END OF Vundle
 
@@ -96,8 +99,8 @@ let g:startify_change_to_dir = 0
 " In vim-airline, only display "hunks" if the diff is non-zero
 let g:airline#extensions#hunks#non_zero_only = 1
 nnoremap <Leader>gb :Gblame<CR>
-nnoremap :gs :Gstatus<CR>
-nnoremap :gd :Gdiff<CR>
+nnoremap <Leader>gs :Gstatus<CR>
+nnoremap <Leader>gd :Gdiff<CR>
 
 let g:gitgutter_sign_added = '+'
 let g:gitgutter_sign_modified = '>'
@@ -192,6 +195,11 @@ endfunction
 " let guru scope be the whole workspace
 " let g:go_guru_scope = ["pinterest.com/ads/..."]
 
+" ---------- ag settings 
+let g:ag_apply_lmappings = 0 "We will use the mappings that I defined in qf.vim
+let g:ag_apply_qapplings = 1
+let g:ag_highlight = 1       "Turn on highlight after search
+
 """""""""""""""""""""""""""""""""""""
 """""" General settings """""""""""""
 """""""""""""""""""""""""""""""""""""
@@ -256,7 +264,10 @@ endif
 let mapleader = "\<Space>"
 
 " Press - to turn off highlighting and clear any message already displayed.
-nnoremap <silent> - :nohlsearch<Bar>:echo<CR>
+let hlstate=0
+" Apprently you can't put this into a function because setting highlight will
+" does work inside a function??
+nnoremap <silent> - :if (hlstate == 0) \| nohlsearch \| else \| set hlsearch \| endif \| let hlstate=1-hlstate<cr>
 
 "Use jk to return to normal mode
 inoremap jk <Esc>
@@ -285,8 +296,6 @@ nnoremap L g_
 """""""""""""""""" Editting """""""""""""""""
 "Y copies until end of line
 noremap Y y$
-"search and replace current word
-nnoremap <C-f><space> :%s/\<<C-r><C-w>\>//g<Left><Left>
 
 "Move current line down
 nnoremap <leader>_ ddp
@@ -316,7 +325,6 @@ vnoremap <silent> U iW
 vnoremap <silent> o aw
 vnoremap <silent> O aW
 " Operate on the current line
-nnoremap <silent> vil _vg_
 onoremap <silent> il :<c-u>normal! _vg_<cr>
 " Operate on next brace
 onoremap <silent> nb :<c-u>execute "normal! /(\r:nohlsearch\rvi("<cr>
@@ -344,8 +352,9 @@ nnoremap ga :<c-u>execute "normal! /(\\\\|{\\\\|,\r:nohlsearch\rw"<cr>
 nnoremap g{ :<c-u>execute "normal! /{\r:nohlsearch\rw"<cr>
 
 " Quick search functions
-nnoremap su :execute "normal! /" . expand("<cword>") . "\r"<cr>
-nnoremap s<Space> :execute "normal! /" . expand("<cWORD>") . "\r"<cr>
+nnoremap <leader>su :execute "normal! /" . expand("<cword>") . "\r"<cr>
+nnoremap <leader>s<Space> :execute "normal! /" . expand("<cWORD>") . "\r"<cr>
+nnoremap <leader>sr<Space> :%s/\<<C-r><C-w>\>//g<Left><Left>
 
 " Go back to the exact spot of last modification line
 nnoremap g. `.
@@ -374,7 +383,7 @@ nnoremap tl  :tablast<CR>
 nnoremap te  :tabedit<Space>
 nnoremap t<CR> :tabedit %<CR>
 nnoremap tm  :tabm<Space>
-nnoremap tx  :tabclose<CR>
+nnoremap tc  :tabclose<CR>
 nnoremap tn :tabnew<CR>
 
 nnoremap <Leader>w :w<CR>
@@ -383,18 +392,15 @@ nnoremap <Leader>w :w<CR>
 " let g:qf_mapping_ack_style = 1
 nmap <C-j> <Plug>(qf_qf_next)
 nmap <C-k> <Plug>(qf_qf_previous)
-nmap <Leader>q <Plug>(qf_qf_toggle)
+nmap <C-h> <Plug>(qf_qf_next_file)
+nmap <C-l> <Plug>(qf_qf_previous_file)
 nmap <C-s> <Plug>(qf_qf_switch)
+
+nmap <Leader>q <Plug>(qf_qf_toggle)
 
 nmap <C-n> <Plug>(qf_loc_next)
 nmap <C-m> <Plug>(qf_loc_previous)
 nmap <Leader>a <Plug>(qf_loc_toggle)
-
-""""""""""""""""" Other """""""""""""""""""""
-"gdb
-noremap :gdb :ConqueGdb
-noremap :gdbs :ConqueGdbSplit
-noremap :gdbvs :ConqueGdbVSplit
 
 "freeze vim latex auto insert
 let g:Inoremap_FreezeInoremap=1

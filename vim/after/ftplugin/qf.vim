@@ -39,8 +39,7 @@ endif
 " t: open entry in a new tab.
 nnoremap <silent> <buffer> t <C-w><CR><C-w>T
 
-" i: open entry
-nnoremap <silent> <buffer> i :<c-u>call quickfix#OpenEntryUnderCursor(0)<CR>
+" open entry
 nnoremap <silent> <buffer> <CR> :<c-u>call quickfix#OpenEntryUnderCursor(0)<CR>
 
 " o: open entry and come back

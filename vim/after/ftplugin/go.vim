@@ -1,9 +1,6 @@
 iabbrev se select
 iabbrev td //TODO (minzhang):
 
-let b:grep_additional_flags = ' -- '. shellescape('*.go') . ' ' . shellescape(':(exclude)*_test.go')
-let g:grep_use_additional_flags = v:true
-
 " :GoBuild and :GoTestCompile
 nnoremap :build :<C-u>call <SID>build_go_files()
 nnoremap :test  <Plug>(go-test)
