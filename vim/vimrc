@@ -5,18 +5,16 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 
-" ----- Making Vim look good ------------------------------------------
+" ----- Making Vim look good ------------------------------------------ 
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
-Plugin 'vim-ctrlspace/vim-ctrlspace'
 Plugin 'mkitt/tabline.vim'
 
 " ----- Vim as a programmer's text editor -----------------------------
-Plugin 'scrooloose/nerdtree'
-Plugin 'jistr/vim-nerdtree-tabs'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'mhinz/vim-startify'
+Plugin 'vim-ctrlspace/vim-ctrlspace'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'fatih/vim-go'
 Plugin 'rhysd/vim-clang-format'
@@ -40,6 +38,11 @@ Plugin 'bfrg/vim-qf-preview'
 
 " ------ For quick search ---------------------------------------------
 Plugin 'rking/ag.vim'
+
+" ------ For text editting --------------------------------------------
+Plugin 'kana/vim-textobj-user'
+Plugin 'tpope/vim-surround'
+Plugin 'tpope/vim-repeat'
 
 call vundle#end()
 " END OF Vundle
@@ -66,6 +69,8 @@ highlight! link GitGutterChangeDelete DiffChange
 " Always show statusbar
 set laststatus=2
 
+let g:CtrlSpaceDefaultMappingKey = "<C-space>"
+
 " Fancy arrow symbols, requires a patched font
 " To install a patched font, run over to
 "     https://github.com/abertsch/Menlo-for-Powerline
@@ -87,10 +92,6 @@ let g:airline#extensions#tabline#formatter = 'default'
 
 " Use the solarized theme for the Airline status bar
 let g:airline_theme='solarized'
-
-" ----- jistr/vim-nerdtree-tabs -----
-" Open/close NERDTree Tabs
-nnoremap <silent> <leader>nt :NERDTreeTabsToggle<CR>
 
 " ----- startify do not change diretory
 let g:startify_change_to_dir = 0
@@ -237,11 +238,11 @@ set updatetime=100
 set foldmethod=indent
 set foldlevel=99
 
+set scrolloff=10                " always show at leat five lines visable above and below cursor
+
 "Set hybrid line numbering and autotoggle
 set number relativenumber
-
-set scrolloff=10                " always show at leat five lines visable above and below cursor
-augroup vimrc
+augroup relativenumber
   autocmd!
   autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
   autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
@@ -296,6 +297,12 @@ nnoremap L g_
 """""""""""""""""" Editting """""""""""""""""
 "Y copies until end of line
 noremap Y y$
+noremap <C-u> viwu
+noremap <C-U> viwU
+noremap <C-~> viw~
+
+"This copied the last yanked text (so it won't be affected by deletes!)
+nnoremap <Leader>p :let @*=@0<CR>p
 
 "Move current line down
 nnoremap <leader>_ ddp
@@ -309,11 +316,12 @@ nnoremap <C-w>~ b~<esc>e
 inoremap <C-w>u <esc>viwUea
 nnoremap <C-w>u viwUe
 
-"Wrap current word with double quotes
+" Wrap current word with double quotes
 nnoremap <leader>" viw<esc>a"<esc>bi"<esc>lel
-"Wrap current word with single quotes
+" Wrap current word with single quotes
 nnoremap <leader>' viw<esc>a"<esc>bi"<esc>lel
 
+" Mappings for easy text selection
 onoremap H _
 onoremap L g_
 onoremap <silent> u iw
@@ -324,6 +332,9 @@ vnoremap <silent> u iw
 vnoremap <silent> U iW
 vnoremap <silent> o aw
 vnoremap <silent> O aW
+
+onoremap <silent> i' :<c-u>normal! F'vf'<cr>
+onoremap <silent> i" :<c-u>normal! F"vf"<cr>
 " Operate on the current line
 onoremap <silent> il :<c-u>normal! _vg_<cr>
 " Operate on next brace
@@ -352,7 +363,9 @@ nnoremap ga :<c-u>execute "normal! /(\\\\|{\\\\|,\r:nohlsearch\rw"<cr>
 nnoremap g{ :<c-u>execute "normal! /{\r:nohlsearch\rw"<cr>
 
 " Quick search functions
-nnoremap <leader>su :execute "normal! /" . expand("<cword>") . "\r"<cr>
+" This search the current word under cursor and the matched pattern has to be a word
+" as well
+nnoremap <leader>su :execute "normal! /\\W\\zs" . expand("<cword>") . "\\ze\\W\r"<cr>
 nnoremap <leader>s<Space> :execute "normal! /" . expand("<cWORD>") . "\r"<cr>
 nnoremap <leader>sr<Space> :%s/\<<C-r><C-w>\>//g<Left><Left>
 
@@ -388,6 +401,13 @@ nnoremap tn :tabnew<CR>
 
 nnoremap <Leader>w :w<CR>
 
+"Buffer commands
+nnoremap <leader>bd :bdelete<CR>
+nnoremap <leader>bn :bnext<CR>
+nnoremap <leader>bp :bnext<CR>
+nnoremap <leader>Bn :sbnext<CR>
+nnoremap <leader>Bp :sbnext<CR>
+
 " quickfix mappings
 " let g:qf_mapping_ack_style = 1
 nmap <C-j> <Plug>(qf_qf_next)
@@ -398,9 +418,7 @@ nmap <C-s> <Plug>(qf_qf_switch)
 
 nmap <Leader>q <Plug>(qf_qf_toggle)
 
-nmap <C-n> <Plug>(qf_loc_next)
-nmap <C-m> <Plug>(qf_loc_previous)
-nmap <Leader>a <Plug>(qf_loc_toggle)
+nnoremap <Leader>S :Startify<CR>
 
 "freeze vim latex auto insert
 let g:Inoremap_FreezeInoremap=1
@@ -415,8 +433,6 @@ iabbrev adn and
 iabbrev waht what
 iabbrev tehn then
 iabbrev vra var
-augroup my_abbs
-augroup END
 cabb vhelp vertical help
 
 nnoremap <Leader><Space><Space> :match ErrorMsg /\s\+$/ <cr>
